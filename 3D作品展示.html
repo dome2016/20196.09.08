@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul{
+            width: 500px;
+            height: 400px;
+            position:relative;
+            margin:100px auto;
+            perspective:800px;
+            -webkit-transform-style:preserve-3d;
+        }
+        li{
+            list-style: none;
+            width: 500px;
+            height: 400px;
+            background:aqua;
+            position: absolute;
+            left: 0;
+            top: 0;
+            -webkit-transition:1s all ease;
+            opacity:0;
+        }
+        .l2{
+            opacity:1;
+           -webkit-transform:translate(-200px,0) rotateY(45deg);
+        }
+        .l1{
+            -webkit-transform:translate(-260px,0) rotateY(45deg);
+        }
+        .cur{
+            opacity:1;
+            -webkit-transform:translateZ(100px);
+        }
+        .r1{
+            opacity:1;
+            -webkit-transform:translate(200px,0) rotateY(-45deg);
+        }
+        .r2{
+            -webkit-transform:translate(260px,0) rotateY(-45deg);
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            var oBtn1=document.querySelector('.btn1');
+            var oBtn2=document.querySelector('.btn2');
+            var aLi=document.querySelectorAll('li');
+            var bOk=false;
+            var arr=[];
+            for(var i=0;i<aLi.length;i++){
+                arr.push(aLi[i].className);
+            }
+            oBtn1.onclick=function(){
+                if(bOk){return;}
+                bOk=true;
+                arr.push(arr.shift());
+                addClass();
+                aLi[aLi.length-1].addEventListener('transitionend',fnEnd,false);
+            };
+            function addClass(){
+                for(var i=0;i<aLi.length;i++){
+                    aLi[i].className=arr[i];
+                }
+            }
+            oBtn2.onclick=function(){
+                if(bOk){return;}
+                bOk=true;
+                arr.unshift(arr.pop());
+                addClass();
+                aLi[aLi.length-1].addEventListener('transitionend',fnEnd,false);
+            };
+            function fnEnd(){
+                aLi[aLi.length-1].removeEventListener('transitionend',fnEnd,false);
+                bOk=false;
+            }
+        };
+    </script>
+</head>
+<body>
+    <input type="button" value="左" class="btn1">
+    <input type="button" value="右" class="btn2">
+    <ul>
+        <li class="l1" style="background:url(img/1.jpg)"></li>
+        <li class="l2" style="background:url(img/2.jpg)"></li>
+        <li class="cur" style="background:url(img/3.jpg)"></li>
+        <li class="r1" style="background:url(img/4.jpg)"></li>
+        <li class="r2" style="background:url(img/5.jpg)"></li>
+        <li style="background:url(img/6.jpg)"></li>
+    </ul>
+</body>
+</html>

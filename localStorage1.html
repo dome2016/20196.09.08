@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        var json={"a":1,"b":2,"c":3};
+
+        localStorage.a=JSON.stringify(json);
+        var json1=JSON.parse(localStorage.a);
+        alert(json1.a);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

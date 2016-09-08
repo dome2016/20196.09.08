@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box{
+            width: 600px;
+            height: 400px;
+            margin:100px auto;
+            position:relative;
+        }
+        .box span{
+            position:absolute;
+            left: 0;
+            top: 0;
+            -webkit-transform-style: preserve-3d;
+            -webkit-transform: perspective(800px) rotateY(0deg);
+        }
+        .box span .front{
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            left: 0;
+            top: 0;
+            background:url(img/1.jpg) no-repeat;
+            -webkit-transform:translateZ(1px);
+        }
+        .box span .back{
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            left: 0;
+            top: 0;
+            background:url(img/2.jpg) no-repeat;
+            -webkit-transform:translateZ(-1px) scale(-1,1);
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            var oBox=document.querySelector('.box');
+            var c=6;
+            var r=4;
+            for(var i=0;i<c;i++){
+                for(var j=0;j<r;j++){
+                    var oS=document.createElement('span');
+                    oS.innerHTML='<i class="front"></i><em class="back"></em>';
+                    oS.style.width=oBox.offsetWidth/c+'px';
+                    oS.style.height=oBox.offsetHeight/r+'px';
+
+                    oBox.appendChild(oS);
+                    oS.style.left=oS.offsetWidth*i+'px';
+                    oS.style.top=oS.offsetHeight*j+'px';
+                    var oI=oS.children[0];
+                    var oEm=oS.children[1];
+                    oI.style.backgroundPosition=oEm.style.backgroundPosition=-oS.offsetWidth*i+'px '+-oS.offsetHeight*j+'px';
+                    oS.c=i;
+                    oS.r=j;
+                }
+            }
+            var aS=oBox.children;
+            var iNow=0;
+            var bOk=false;
+            oBox.onclick=function(){
+                if(bOk){return;}
+                bOk=true;
+                iNow++;
+                for(var i=0;i<aS.length;i++){
+                    (function(index){
+                        setTimeout(function(){
+                            aS[index].style.WebkitTransition='1s all ease';
+                            aS[index].style.WebkitTransform='perspective(800px) rotateY(180deg)';
+                        },(aS[i].c+aS[i].r)*100)
+                    })(i);
+                }
+                function tranEnd(){
+                    aS[aS.length-1].removeEventListener('transitionend',tranEnd,false);
+                    var aI=oBox.querySelectorAll('i');
+                    var aEm=oBox.querySelectorAll('em');
+                    for(var i=0;i<aS.length;i++){
+                        aS[i].style.WebkitTransition='none';
+                        aS[i].style.WebkitTransform='perspective(800px) rotate(0deg)';
+                        aI[i].style.backgroundImage='url(img/'+(iNow%3+1)+'.jpg)';
+                        aEm[i].style.backgroundImage='url(img/'+((1+iNow)%3+1)+'.jpg)';
+                    }
+                    bOk=false;
+                }
+                aS[aS.length-1].addEventListener('transitionend',tranEnd,false);
+
+            };
+        };
+    </script>
+</head>
+<body>
+    <div class="box"></div>
+</body>
+</html>
